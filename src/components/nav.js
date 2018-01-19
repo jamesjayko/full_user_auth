@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Nav = props => {
   const navStyles = {
-    padding: "0 10px"
+    padding: "0 50px"
   };
   return (
     <nav style={navStyles} className="blue darken-4">
@@ -21,7 +21,7 @@ const Nav = props => {
           <Link to="/sign-in">Sign In</Link>
         </li>
         <li>
-          <Link to="/sign-out">Sign out</Link>
+          <Link to="/sign-out">Sign up</Link>
         </li>
       </ul>
     </nav>
