@@ -1,11 +1,13 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import {renderInput} from '../helpers';
+import { renderInput } from "../helpers/";
+import { signUp } from "../actions";
 
 class SignUp extends Component {
-
   handleSignUp(vals) {
-    console.log("vals: ", vals);
+    console.log("Values::::", vals);
+    this.props.signUp(vals);
   }
 
   render() {
@@ -14,31 +16,34 @@ class SignUp extends Component {
       <div>
         <h1 className="center-align">Sign Up</h1>
         <div className="row">
-          <div className="col s8 offset-s2 grey lighten-4">
-            <div className="card-content">
-              <form onSubmit={handleSubmit(this.handleSignUp.bind(this))}>
-                <Field
-                  type="text"
-                  name="email"
-                  placeholder="Enter email address"
-                  component={renderInput}
-                />
-                <Field
-                  type="password"
-                  name="password"
-                  placeholder="Enter password"
-                  component={renderInput}
-                />
-                <Field
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirm password"
-                  component={renderInput}
-                />
-                <div className="right-align">
-                  <button className="btn blue darken-4">SIGN UP</button>
-                </div>
-              </form>
+          <div className="col s8 offset-s2">
+            <div className="card grey lighten-5">
+              <div className="card-content">
+                <form onSubmit={handleSubmit(this.handleSignUp.bind(this))}>
+                  <Field
+                    name="email"
+                    type="text"
+                    placeholder="Enter email address"
+                    component={renderInput}
+                  />
+                  <Field
+                    name="password"
+                    type="password"
+                    placeholder="Create a password"
+                    component={renderInput}
+                  />
+                  <Field
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Confirm password"
+                    component={renderInput}
+                  />
+                  <div className="center-align red-text">{this.props.formError}</div>
+                  <div className="right-align">
+                    <button className="btn blue darken-4">Sign Up</button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -49,15 +54,17 @@ class SignUp extends Component {
 
 function validate(values) {
   const error = {};
+
   if (!values.email) {
-    error.email = "Please enter email";
+    error.email = "Please enter an email";
   }
   if (!values.password) {
-    error.password = "Please enter password";
+    error.password = "Please enter a password";
   }
-  if (values.password !== values.confirmPassword) {
-    error.confirmPassword = "Password do not match";
+  if (!(values.password === values.confirmPassword)) {
+    error.confirmPassword = "Passwords do not match";
   }
+
   return error;
 }
 
@@ -66,4 +73,10 @@ SignUp = reduxForm({
   validate: validate
 })(SignUp);
 
-export default SignUp;
+function mapStateToProps(state) {
+  return{
+    formError: state.user.error
+  }
+}
+
+export default connect(mapStateToProps, { signUp })(SignUp);
