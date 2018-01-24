@@ -42,3 +42,26 @@ export function signIn(cred) {
       );
   };
 }
+
+export function getQuote() {
+  return dispatch => {
+    axios
+      .get(BASE_URL, {
+        headers: { authorization: localStorage.getItem("token") }
+      })
+      .then(resp => {
+        console.log("quote request resp: ", resp);
+        dispatch({
+          type: types.GET_QUOTE,
+          payload: resp.data.message
+        })
+      });
+  };
+}
+
+export function signOut() {
+  localStorage.removeItem('token');
+  return {
+    type: types.SIGN_OUT
+  }
+}
